@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
     %% ===== Core people =====
     class User {
@@ -19,6 +20,7 @@ classDiagram
     User <|-- Student
     User <|-- Faculty
     User <|-- Librarian
+    ...
 
     %% ===== Books & copies =====
     class Book {
