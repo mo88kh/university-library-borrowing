@@ -2,7 +2,6 @@
 classDiagram
     %% ===== Core people =====
     class User {
-      <<abstract>>
       +int userId
       +string name
       +string email
@@ -20,7 +19,6 @@ classDiagram
     User <|-- Student
     User <|-- Faculty
     User <|-- Librarian
-    ...
 
     %% ===== Books & copies =====
     class Book {
@@ -36,7 +34,7 @@ classDiagram
       +string location
     }
 
-    Book "1" *-- "1..*" BookCopy : composition
+    Book *-- BookCopy : composition
 
     %% ===== Transactions & reservations =====
     class BorrowingTransaction {
@@ -49,14 +47,14 @@ classDiagram
     class Reservation {
       +int reservationId
       +date requestDate
-      +string status  %% Active/Cancelled/Fulfilled
+      +string status
       +int queuePosition
     }
 
-    User "1" --> "0..*" BorrowingTransaction : makes
-    BookCopy "1" --> "0..*" BorrowingTransaction : for
-    User "1" --> "0..*" Reservation : places
-    Book "1" --> "0..*" Reservation : for title
+    User --> BorrowingTransaction : makes
+    BookCopy --> BorrowingTransaction : for
+    User --> Reservation : places
+    Book --> Reservation : for title
 
     %% ===== Fines & notifications =====
     class Fine {
@@ -64,38 +62,17 @@ classDiagram
       +decimal amount
       +date assessedAt
       +date paidAt
-      +string status  %% Unpaid/Paid
+      +string status
     }
     class Notification {
       +int notificationId
-      +string type   %% Checkout/Reminder/Overdue
-      +string channel  %% Email
+      +string type
+      +string channel
       +date sentAt
       +string message
     }
 
-    BorrowingTransaction "1" --> "0..1" Fine : may incur
-    User "1" --> "0..*" Notification : receives
-    BorrowingTransaction "1" --> "0..*" Notification : triggers
-    Reservation "1" --> "0..*" Notification : triggers
-
-    %% ===== Policies & services =====
-    class LoanPolicy {
-      +int policyId
-      +string userType  %% Student/Faculty
-      +int maxDays
-      +int maxRenewals
-      +decimal finePerDay
-    }
-    LoanPolicy "1" --> "0..*" BorrowingTransaction : governs
-
-    class INotification {
-      <<interface>>
-      +send(user, message)
-    }
-    class EmailNotificationService {
-      +send(user, message)
-    }
-
-    EmailNotificationService ..|> INotification : realization
-    BorrowingTransaction ..> INotification : uses
+    BorrowingTransaction --> Fine : may incur
+    User --> Notification : receives
+    BorrowingTransaction --> Notification : triggers
+    Reservation --> Notification : triggers
