@@ -1,1 +1,31 @@
-<pre> ```mermaid flowchart LR subgraph SYS["Library Borrowing System"] UC_BORROW(("Borrow book")) UC_CHECK(("Check availability")) UC_RENEW(("Renew book")) UC_RESERVE(("Reserve book")) UC_RETURN(("Return book")) UC_FINE(("Pay fine")) UC_CONFIRM(("Send confirmation")) end User[[User]] Student[[Student]] Faculty[[Faculty]] Librarian[[Librarian]] Email[["Email System"]] Student --> User Faculty --> User User --- UC_BORROW User --- UC_RENEW User --- UC_RESERVE User --- UC_RETURN Librarian --- UC_RETURN Email --- UC_CONFIRM UC_BORROW -.->|«include»| UC_CHECK UC_BORROW -.->|«include»| UC_CONFIRM UC_RETURN -.->|«extend»| UC_FINE ``` </pre>
+```mermaid
+flowchart LR
+  subgraph SYS["Library Borrowing System"]
+    UC_BORROW(("Borrow book"))
+    UC_CHECK(("Check availability"))
+    UC_RENEW(("Renew book"))
+    UC_RESERVE(("Reserve book"))
+    UC_RETURN(("Return book"))
+    UC_FINE(("Pay fine"))
+    UC_CONFIRM(("Send confirmation"))
+  end
+
+  User[[User]]
+  Student[[Student]]
+  Faculty[[Faculty]]
+  Librarian[[Librarian]]
+  Email[["Email System"]]
+
+  Student --> User
+  Faculty --> User
+
+  User --- UC_BORROW
+  User --- UC_RENEW
+  User --- UC_RESERVE
+  User --- UC_RETURN
+  Librarian --- UC_RETURN
+  Email --- UC_CONFIRM
+
+  UC_BORROW -.->|«include»| UC_CHECK
+  UC_BORROW -.->|«include»| UC_CONFIRM
+  UC_RETURN -.->|«extend»| UC_FINE
